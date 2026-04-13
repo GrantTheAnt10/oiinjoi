@@ -153,7 +153,7 @@ const engine = Engine.create({
   gravity:{ x:0, y:1.0 },
   positionIterations: 10,
   velocityIterations: 8,
-  constraintIterations: 4
+  constraintIterations: 8
 });
 const world  = engine.world;
 const runner = Runner.create({ delta: 1000/60, isFixed: true });
@@ -480,10 +480,10 @@ class Ragdoll {
     this.wanderTimer=0;
     this.attackCooldown=0;
     this.stanceWidth=26+Math.random()*8;
-    this.balanceLeanGain=0.02;
-    this.ankleStiff=0.12;
-    this.kneeStiff=0.10;
-    this.hipStiff=0.06;
+    this.balanceLeanGain=0.03;
+    this.ankleStiff=0.18;
+    this.kneeStiff=0.14;
+    this.hipStiff=0.10;
     this.uprightAnchor=null;
     this.uprightString=null;
     this.supportMemory=0;
@@ -496,10 +496,10 @@ class Ragdoll {
   _build(x,y){
     // Non-arm parts: collide with world (0x0002) AND other ragdolls' body parts (0x0001).
     // Negative group prevents parts of the same ragdoll from colliding with each other.
-    const fBody={frictionAir:.04,friction:.6,restitution:.15,
+    const fBody={frictionAir:.07,friction:.6,restitution:.15,
       collisionFilter:{category:0x0001,mask:0x0001|0x0002,group:this.group}};
     // Arm parts: only collide with world/environment (0x0002), not other ragdoll parts.
-    const fArm={frictionAir:.04,friction:.6,restitution:.15,
+    const fArm={frictionAir:.07,friction:.6,restitution:.15,
       collisionFilter:{category:0x0004,mask:0x0002,group:this.group}};
     const p={
       head:     Bodies.circle(x, y-92, 13, {...fBody,label:'head_'+this.id}),
@@ -549,7 +549,7 @@ class Ragdoll {
     this.uprightString = Constraint.create({
       bodyA: this.uprightAnchor, bodyB: p.head,
       pointA: {x:0,y:0}, pointB: {x:0,y:0},
-      length: RD_STRING_LEN, stiffness: 0.012, damping: 0.08
+      length: RD_STRING_LEN, stiffness: 0.04, damping: 0.22
     });
 
     Composite.add(world,[...Object.values(p),...cons, this.uprightAnchor, this.uprightString]);
