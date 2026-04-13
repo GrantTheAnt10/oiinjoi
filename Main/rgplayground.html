@@ -10,9 +10,12 @@ body{background:#0a0a0f;overflow:hidden;display:flex;font-family:'Share Tech Mon
 #sidebar{
   width:88px;min-width:88px;background:linear-gradient(180deg,#111118 0%,#0d0d14 100%);
   border-right:1px solid #2a1f35;display:flex;flex-direction:column;align-items:center;
-  padding:8px 0;gap:5px;z-index:100;overflow-y:auto;height:100vh;scrollbar-width:none;
+  padding:8px 0;gap:5px;z-index:100;overflow-y:auto;height:100vh;
+  scrollbar-width:thin;scrollbar-color:#ff2255 #1a1020;
 }
-#sidebar::-webkit-scrollbar{display:none;}
+#sidebar::-webkit-scrollbar{width:4px;}
+#sidebar::-webkit-scrollbar-track{background:#1a1020;}
+#sidebar::-webkit-scrollbar-thumb{background:#ff2255;border-radius:2px;}
 .sidebar-title{color:#ff2255;font-size:7px;letter-spacing:3px;text-transform:uppercase;
   padding:4px 0 8px;border-bottom:1px solid #2a1f35;width:100%;text-align:center;
   font-family:'Bebas Neue',sans-serif;font-size:11px;}
@@ -20,7 +23,7 @@ body{background:#0a0a0f;overflow:hidden;display:flex;font-family:'Share Tech Mon
   padding:6px 0 2px;width:100%;text-align:center;}
 .sep{width:60px;height:1px;background:linear-gradient(90deg,transparent,#2a1f35,transparent);margin:2px 0;}
 .tool-btn{
-  width:72px;height:64px;background:linear-gradient(145deg,#1a1a24,#131320);
+  width:72px;height:52px;background:linear-gradient(145deg,#1a1a24,#131320);
   border:1px solid #2a2a3a;border-radius:10px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;cursor:grab;transition:all .15s;
   user-select:none;position:relative;overflow:hidden;
@@ -31,7 +34,7 @@ body{background:#0a0a0f;overflow:hidden;display:flex;font-family:'Share Tech Mon
 .tool-btn:hover::before{opacity:1;}
 .tool-btn.active{border-color:#ff2255;background:linear-gradient(145deg,#2a1a24,#1f1230);
   box-shadow:0 0 15px rgba(255,34,85,0.3);}
-.tool-btn .icon{font-size:26px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8));}
+.tool-btn .icon{font-size:20px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8));}
 .tool-btn .label{font-size:7px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
 #game-wrap{flex:1;position:relative;}
 #canvas{display:block;}
@@ -465,10 +468,12 @@ class Ragdoll {
     this.attackCooldown=0;
     this.stanceWidth=26+Math.random()*8;
     this.balanceLeanGain=0.02;
-    this.ankleStiff=0.08;
-    this.kneeStiff=0.07;
-    this.hipStiff=0.06;
+    this.ankleStiff=0.18;
+    this.kneeStiff=0.15;
+    this.hipStiff=0.08;
     this.supportMemory=0;
+    this.fleeTarget=null;
+    this.fleeCooldown=0;
     this.group=-(++ragdollGroupSeed);
     this._build(x,y);
   }
@@ -501,19 +506,19 @@ class Ragdoll {
 
     const C=(bA,bB,pA,pB,s=.6)=>Constraint.create({bodyA:bA,bodyB:bB,pointA:pA,pointB:pB,length:0,stiffness:s,damping:0.05});
     const cons=[
-      C(p.head,  p.neck,   {x:0,y:13}, {x:0,y:-7}),          // 0 head-neck
-      C(p.neck,  p.torso,  {x:0,y:7},  {x:0,y:-22}),         // 1 neck-torso
-      C(p.torso, p.pelvis, {x:0,y:22}, {x:0,y:-9}),          // 2 spine
-      C(p.torso, p.uArmL,  {x:-14,y:-16},{x:0,y:-15}),       // 3 shoulderL
-      C(p.uArmL, p.lArmL,  {x:0,y:15}, {x:0,y:-14}),         // 4 elbowL
-      C(p.torso, p.uArmR,  {x:14,y:-16},{x:0,y:-15}),        // 5 shoulderR
-      C(p.uArmR, p.lArmR,  {x:0,y:15}, {x:0,y:-14}),         // 6 elbowR
-      C(p.pelvis,p.uLegL,  {x:-9,y:9}, {x:0,y:-18}),         // 7 hipL
-      C(p.uLegL, p.lLegL,  {x:0,y:18}, {x:0,y:-17}),         // 8 kneeL
-      C(p.lLegL, p.footL,  {x:0,y:17}, {x:0,y:-4.5}),        // 9 ankleL
-      C(p.pelvis,p.uLegR,  {x:9,y:9},  {x:0,y:-18}),         // 10 hipR
-      C(p.uLegR, p.lLegR,  {x:0,y:18}, {x:0,y:-17}),         // 11 kneeR
-      C(p.lLegR, p.footR,  {x:0,y:17}, {x:0,y:-4.5}),        // 12 ankleR
+      C(p.head,  p.neck,   {x:0,y:13}, {x:0,y:-7},  0.9),   // 0 head-neck
+      C(p.neck,  p.torso,  {x:0,y:7},  {x:0,y:-22}, 0.9),   // 1 neck-torso
+      C(p.torso, p.pelvis, {x:0,y:22}, {x:0,y:-9},  0.9),   // 2 spine
+      C(p.torso, p.uArmL,  {x:-14,y:-16},{x:0,y:-15},0.65), // 3 shoulderL
+      C(p.uArmL, p.lArmL,  {x:0,y:15}, {x:0,y:-14}, 0.8),  // 4 elbowL
+      C(p.torso, p.uArmR,  {x:14,y:-16},{x:0,y:-15},0.65),  // 5 shoulderR
+      C(p.uArmR, p.lArmR,  {x:0,y:15}, {x:0,y:-14}, 0.8),  // 6 elbowR
+      C(p.pelvis,p.uLegL,  {x:-9,y:9}, {x:0,y:-18}, 0.65), // 7 hipL
+      C(p.uLegL, p.lLegL,  {x:0,y:18}, {x:0,y:-17}, 0.85), // 8 kneeL
+      C(p.lLegL, p.footL,  {x:0,y:17}, {x:0,y:-4.5},0.85), // 9 ankleL
+      C(p.pelvis,p.uLegR,  {x:9,y:9},  {x:0,y:-18}, 0.65), // 10 hipR
+      C(p.uLegR, p.lLegR,  {x:0,y:18}, {x:0,y:-17}, 0.85), // 11 kneeR
+      C(p.lLegR, p.footR,  {x:0,y:17}, {x:0,y:-4.5},0.85), // 12 ankleR
     ];
     this.cons=cons;
     this.consBones=['head','neck','spine','shoulderL','elbowL','shoulderR','elbowR',
@@ -522,11 +527,22 @@ class Ragdoll {
     Composite.add(world,[...Object.values(p),...cons]);
   }
 
-  hurt(amt,part,boneName){
+  hurt(amt,part,boneName,attacker=null){
     if(this.dead) return;
     this.hp=Math.max(this.hp-amt,0);
     if(boneName && Math.random()<amt*.04) this.breakBone(boneName);
-    if(this.hp<=0){ this.hp=0; this._die(); }
+    if(this.hp<=0){ this.hp=0; this._die(); return; }
+    // React to being attacked by another ragdoll
+    if(attacker && attacker!==this && amt>=5 &&
+       (this.behavior==='stand'||this.behavior==='wander')){
+      if(Math.random()<0.5){
+        this.setBehavior('berserk');
+      } else {
+        this.fleeTarget=attacker;
+        this.behavior='flee';
+        this.fleeCooldown=300;
+      }
+    }
   }
 
   breakBone(nm){
@@ -562,11 +578,12 @@ class Ragdoll {
 
   setBehavior(mode){
     if(this.dead) return;
-    const allowed=['stand','sit','wander','berserk'];
+    const allowed=['stand','sit','wander','berserk','flee'];
     this.behavior=allowed.includes(mode)?mode:'stand';
     this.wanderTimer=0;
     this.wanderDir=0;
     if(this.behavior!=='berserk') this.attackCooldown=0;
+    if(this.behavior==='flee') this.fleeCooldown=300;
   }
 
   // ── NEW: Full standing AI + behaviors ───────────────────────────
@@ -588,6 +605,7 @@ class Ragdoll {
 
     if(this.behavior==='wander') this._wanderMotion();
     if(this.behavior==='berserk') this._berserkMotion();
+    if(this.behavior==='flee') this._fleeMotion();
   }
 
   _muscle(body,target,stiff=0.08,damp=0.86){
@@ -679,9 +697,10 @@ class Ragdoll {
     this.supportMemory=this.supportMemory*0.9+(supported.length?0.1:0);
 
     // Upright muscles
-    this._muscle(torso, -leanErr*0.1, 0.09, 0.84);
-    this._muscle(pelvis, -leanErr*0.08, 0.07, 0.85);
-    if(p.head) this._muscle(p.head, -leanErr*0.12, 0.09, 0.8);
+    this._muscle(torso, -leanErr*0.1, 0.22, 0.92);
+    this._muscle(pelvis, -leanErr*0.08, 0.18, 0.92);
+    if(p.neck) this._muscle(p.neck, -leanErr*0.06, 0.20, 0.92);
+    if(p.head) this._muscle(p.head, -leanErr*0.12, 0.20, 0.90);
 
     // Leg muscles with simple PD hips/knees/ankles
     const hipBase=-0.05 - leanErr*this.balanceLeanGain;
@@ -693,9 +712,9 @@ class Ragdoll {
       {u:p.uLegR,l:p.lLegR,f:p.footR,side:1}
     ];
     for(const leg of legs){
-      if(leg.u) this._muscle(leg.u, hipBase+leg.side*0.08, this.hipStiff, 0.86);
-      if(leg.l) this._muscle(leg.l, kneeBase, this.kneeStiff, 0.86);
-      if(leg.f) this._muscle(leg.f, ankleBase+leg.side*0.04, this.ankleStiff, 0.84);
+      if(leg.u) this._muscle(leg.u, hipBase+leg.side*0.08, this.hipStiff, 0.88);
+      if(leg.l) this._muscle(leg.l, kneeBase, this.kneeStiff, 0.92);
+      if(leg.f) this._muscle(leg.f, ankleBase+leg.side*0.04, this.ankleStiff, 0.92);
       if(leg.f){
         const targetX=supportX+leg.side*(stance*0.5);
         Body.applyForce(leg.f, leg.f.position,{x:(targetX-leg.f.position.x)*0.0007,y:0});
@@ -708,8 +727,8 @@ class Ragdoll {
       [p.uArmR, p.lArmR, -0.18]
     ];
     for(const [uArm, lArm, restAngle] of armSets){
-      if(uArm) this._muscle(uArm, restAngle, 0.03, 0.9);
-      if(lArm) this._muscle(lArm, 0, 0.025, 0.9);
+      if(uArm) this._muscle(uArm, restAngle, 0.05, 0.90);
+      if(lArm) this._muscle(lArm, 0, 0.14, 0.92);
     }
 
     // Ground reaction through feet instead of torso hovering
@@ -771,14 +790,30 @@ class Ragdoll {
     const tPos=target.parts.torso.position;
     const torsoPos=p.torso.position;
     const dir=Math.sign(tPos.x-torsoPos.x)||1;
-    Body.applyForce(p.pelvis,p.pelvis.position,{x:dir*0.0026,y:-0.0007});
+    Body.applyForce(p.pelvis,p.pelvis.position,{x:dir*0.0035,y:-0.0008});
     this._muscle(p.torso, dir*0.06, 0.05, 0.88);
     const dist=Math.hypot(tPos.x-torsoPos.x,tPos.y-torsoPos.y);
     if(dist<80 && this.attackCooldown<=0){
-      target.hurt(12,target.parts.torso,'torso');
+      target.hurt(12,target.parts.torso,'torso',this);
       Body.applyForce(target.parts.torso,target.parts.torso.position,{x:dir*0.02,y:-0.012});
       spawnBlood(tPos.x,tPos.y,dir*5,-2,10);
       this.attackCooldown=32;
+    }
+  }
+
+  _fleeMotion(){
+    const p=this.parts;
+    if(!this.fleeTarget||this.fleeTarget.dead||this.fleeCooldown<=0){
+      this.setBehavior('wander');
+      return;
+    }
+    this.fleeCooldown--;
+    const fPos=this.fleeTarget.parts.torso.position;
+    const myPos=p.torso.position;
+    const dir=-(Math.sign(fPos.x-myPos.x)||1);
+    Body.applyForce(p.pelvis,p.pelvis.position,{x:dir*0.003,y:-0.0005});
+    if(Math.abs(p.torso.velocity.x)>3.5){
+      Body.setVelocity(p.torso,{x:p.torso.velocity.x*0.9,y:p.torso.velocity.y});
     }
   }
 
