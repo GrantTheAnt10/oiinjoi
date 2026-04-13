@@ -51,6 +51,23 @@ body{background:#0a0a0f;overflow:hidden;display:flex;font-family:'Share Tech Mon
 #kill-counter{position:absolute;top:12px;right:120px;pointer-events:none;
   font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff2255;
   text-shadow:0 0 15px #ff225566;letter-spacing:2px;}
+.hidden{display:none!important;}
+.selection-panel{width:100%;padding:6px 0 10px;display:none;flex-direction:column;align-items:center;gap:6px;}
+.selection-panel.active{display:flex;}
+.control-btn{cursor:pointer;}
+.control-menu{width:84%;background:linear-gradient(135deg,#1a1a24,#11111a);
+  border:1px solid #2a2a3a;border-radius:10px;padding:8px;display:none;flex-direction:column;
+  gap:6px;box-shadow:0 8px 18px rgba(0,0,0,0.35);}
+.control-menu.open{display:flex;}
+.control-menu .menu-title{color:#ff2255;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  text-align:center;}
+.control-menu button{
+  background:linear-gradient(145deg,#262634,#1a1a26);color:#ddd;border:1px solid #2a2a3a;
+  border-radius:8px;padding:6px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;
+}
+.control-menu button.active{border-color:#ff2255;color:#ff2255;}
+.control-menu button:hover{border-color:#ff2255;box-shadow:0 0 12px rgba(255,34,85,0.25);}
 </style>
 </head>
 <body>
@@ -78,6 +95,20 @@ body{background:#0a0a0f;overflow:hidden;display:flex;font-family:'Share Tech Mon
   <div class="tool-group-label">UTILS</div>
   <div class="tool-btn" data-type="grab"   title="Grab Mode"><div class="icon">✋</div><div class="label">Grab</div></div>
   <div class="tool-btn" data-type="clear"  title="Clear All"><div class="icon">🗑️</div><div class="label">Clear</div></div>
+  <div class="sep"></div>
+  <div id="selection-panel" class="selection-panel">
+    <div class="tool-group-label">DUMMY CONTROL</div>
+    <div id="selection-button" class="tool-btn control-btn" title="Control selected dummy">
+      <div class="icon">✨</div><div class="label" id="selection-button-label">Select Dummy</div>
+    </div>
+    <div id="control-menu" class="control-menu">
+      <div class="menu-title">Actions</div>
+      <button data-behavior="stand"  type="button">Stand</button>
+      <button data-behavior="sit"    type="button">Sit</button>
+      <button data-behavior="wander" type="button">Wander</button>
+      <button data-behavior="berserk" type="button">Berserk</button>
+    </div>
+  </div>
 </div>
 
 <div id="game-wrap">
@@ -362,13 +393,51 @@ function drawPending(){
 const RAGDOLLS=[];
 let kills=0;
 
+let selectedRagdoll=null;
+const selectionPanel=document.getElementById('selection-panel');
+const selectionButton=document.getElementById('selection-button');
+const selectionButtonLabel=document.getElementById('selection-button-label');
+const controlMenu=document.getElementById('control-menu');
+const behaviorButtons=[...controlMenu.querySelectorAll('button')];
+
+function updateBehaviorButtons(mode){
+  behaviorButtons.forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.behavior===mode);
+  });
+}
+
+function setSelectedRagdoll(rd){
+  selectedRagdoll=rd && !rd.dead ? rd : null;
+  if(selectedRagdoll){
+    selectionPanel.classList.add('active');
+    selectionButtonLabel.textContent='Control Dummy';
+    updateBehaviorButtons(selectedRagdoll.behavior);
+  } else {
+    selectionPanel.classList.remove('active');
+    controlMenu.classList.remove('open');
+    selectionButtonLabel.textContent='Select Dummy';
+    updateBehaviorButtons('');
+  }
+}
+
+selectionButton.addEventListener('click',()=>{
+  if(!selectedRagdoll) return;
+  controlMenu.classList.toggle('open');
+});
+
+behaviorButtons.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(!selectedRagdoll) return;
+    selectedRagdoll.setBehavior(btn.dataset.behavior);
+    controlMenu.classList.remove('open');
+    updateBehaviorButtons(btn.dataset.behavior);
+  });
+});
+
 const SKINS=['#f5c8a0','#e8b080','#c8825a','#a05830','#7a3820'];
 const SHIRTS=['#2a5a9a','#9a2a2a','#2a9a5a','#6a2a9a','#9a7a1a','#1a7a9a'];
 const PANTS=['#1a1a3a','#3a1a1a','#1a3a1a','#0a0a0a','#3a3030','#2a2040'];
 const HAIRS=['#1a0a00','#3a2000','#000','#4a3800','#888'];
-
-// Health threshold: above this ratio the ragdoll tries to stand; below it goes limp
-const STAND_THRESHOLD = 0.35;
 
 class Ragdoll {
   constructor(x,y){
@@ -384,7 +453,10 @@ class Ragdoll {
     this.hair=HAIRS[Math.random()*HAIRS.length|0];
     this.aiTick=0;
     this.groundTime=0;
-    this.isStanding=true; // NEW: track standing state
+    this.behavior='stand';
+    this.wanderDir=0;
+    this.wanderTimer=0;
+    this.attackCooldown=0;
     this._build(x,y);
   }
 
@@ -434,16 +506,8 @@ class Ragdoll {
 
   hurt(amt,part,boneName){
     if(this.dead) return;
-    this.hp-=amt;
+    this.hp=Math.max(this.hp-amt,0);
     if(boneName && Math.random()<amt*.04) this.breakBone(boneName);
-    // Check if we should collapse into ragdoll mode
-    if(this.hp/this.maxHp <= STAND_THRESHOLD && this.isStanding){
-      this.isStanding = false;
-      // Reduce friction so they slump more naturally
-      for(const b of Object.values(this.parts)){
-        Body.set(b, 'frictionAir', 0.01);
-      }
-    }
     if(this.hp<=0){ this.hp=0; this._die(); }
   }
 
@@ -465,13 +529,11 @@ class Ragdoll {
       if(this.cons[idx]){ Composite.remove(world,this.cons[idx]); this.cons[idx]=null; }
     }
     sndBone();
-    // A broken bone also reduces standing ability
-    if(this.broken.size >= 2) this.isStanding = false;
   }
 
   _die(){
     this.dead=true; kills++;
-    this.isStanding=false;
+    this.behavior='dead';
     sndDie();
     for(const b of Object.values(this.parts)){
       Body.setMass(b,Body.getMass(b)*1.8);
@@ -480,7 +542,16 @@ class Ragdoll {
     spawnBlood(this.parts.torso.position.x,this.parts.torso.position.y,0,-5,30);
   }
 
-  // ── NEW: Full standing AI ──────────────────────────────────────
+  setBehavior(mode){
+    if(this.dead) return;
+    const allowed=['stand','sit','wander','berserk'];
+    this.behavior=allowed.includes(mode)?mode:'stand';
+    this.wanderTimer=0;
+    this.wanderDir=0;
+    if(this.behavior!=='berserk') this.attackCooldown=0;
+  }
+
+  // ── NEW: Full standing AI + behaviors ───────────────────────────
   updateAI(){
     if(this.dead) return;
     // If being grabbed by the user, skip AI
@@ -488,10 +559,64 @@ class Ragdoll {
     if(parts.some(b => b === grabbedBody)) return;
 
     this.aiTick++;
+    if(this.attackCooldown>0) this.attackCooldown--;
 
-    // If not standing (health too low or bones broken), go fully limp
-    if(!this.isStanding) return;
+    if(this.behavior==='sit'){
+      this._applySitPose();
+      return;
+    }
 
+    this._applyStandBalance();
+
+    if(this.behavior==='wander') this._wanderMotion();
+    if(this.behavior==='berserk') this._berserkMotion();
+  }
+
+  _applySitPose(){
+    const p=this.parts;
+    const torso=p.torso, pelvis=p.pelvis;
+    const floorY=canvas.height-20;
+
+    // Lean torso slightly back while seated
+    const targetTorso=-0.2;
+    Body.setAngularVelocity(torso, torso.angularVelocity*0.82 + (targetTorso-torso.angle)*0.08);
+    Body.setAngularVelocity(pelvis, pelvis.angularVelocity*0.82 + ((targetTorso*0.6)-pelvis.angle)*0.05);
+
+    // Keep head upright
+    if(p.head){
+      Body.setAngularVelocity(p.head, p.head.angularVelocity*0.82 + (-p.head.angle*0.08));
+    }
+
+    const legSets=[
+      [p.uLegL,p.lLegL,p.footL],
+      [p.uLegR,p.lLegR,p.footR]
+    ];
+    for(const [u,l,f] of legSets){
+      if(u) Body.setAngularVelocity(u, u.angularVelocity*0.8 + ((1.2)-u.angle)*0.06);
+      if(l) Body.setAngularVelocity(l, l.angularVelocity*0.82 + ((-1.1)-l.angle)*0.05);
+      if(f) Body.setAngularVelocity(f, f.angularVelocity*0.85 + ((-0.2)-f.angle)*0.05);
+    }
+
+    const armSets=[
+      [p.uArmL,p.lArmL,0.25],
+      [p.uArmR,p.lArmR,-0.25]
+    ];
+    for(const [u,l,target] of armSets){
+      if(u) Body.setAngularVelocity(u, u.angularVelocity*0.86 + (target-u.angle)*0.04);
+      if(l) Body.setAngularVelocity(l, l.angularVelocity*0.9 + (-l.angle*0.04));
+    }
+
+    const targetSeatY=floorY-36;
+    const diffY=torso.position.y-targetSeatY;
+    if(diffY>2){
+      Body.applyForce(torso, torso.position,{x:0,y:-0.004*Math.min(diffY*0.12,1)});
+    }
+    if(Math.abs(torso.velocity.x)>0.4){
+      Body.setVelocity(torso,{x:torso.velocity.x*0.9,y:torso.velocity.y});
+    }
+  }
+
+  _applyStandBalance(){
     const p = this.parts;
     const torso = p.torso;
     const pelvis = p.pelvis;
@@ -583,8 +708,55 @@ class Ragdoll {
     }
   }
 
+  _wanderMotion(){
+    const p=this.parts;
+    if(this.wanderTimer<=0){
+      this.wanderDir=Math.random()<0.5?-1:1;
+      this.wanderTimer=50+Math.random()*90|0;
+    }
+    this.wanderTimer--;
+    const force=0.0018;
+    Body.applyForce(p.pelvis,p.pelvis.position,{x:this.wanderDir*force,y:-0.0004});
+    if(Math.abs(p.torso.velocity.x)>3){
+      Body.setVelocity(p.torso,{x:p.torso.velocity.x*0.9,y:p.torso.velocity.y});
+    }
+  }
+
+  _berserkMotion(){
+    const target=findNearestOpponent(this);
+    if(!target){
+      this._wanderMotion();
+      return;
+    }
+    const p=this.parts;
+    const tPos=target.parts.torso.position;
+    const torsoPos=p.torso.position;
+    const dir=Math.sign(tPos.x-torsoPos.x)||1;
+    Body.applyForce(p.pelvis,p.pelvis.position,{x:dir*0.0026,y:-0.0007});
+    Body.setAngularVelocity(p.torso,p.torso.angularVelocity*0.88 + (-(p.torso.angle - dir*0.06))*0.05);
+    const dist=Math.hypot(tPos.x-torsoPos.x,tPos.y-torsoPos.y);
+    if(dist<80 && this.attackCooldown<=0){
+      target.hurt(12,target.parts.torso,'torso');
+      Body.applyForce(target.parts.torso,target.parts.torso.position,{x:dir*0.02,y:-0.012});
+      spawnBlood(tPos.x,tPos.y,dir*5,-2,10);
+      this.attackCooldown=32;
+    }
+  }
+
   draw(){
     const p=this.parts;
+    if(selectedRagdoll===this){
+      ctx.save();
+      const center=p.torso.position;
+      ctx.translate(center.x,center.y);
+      const g=ctx.createRadialGradient(0,0,18,0,0,70);
+      g.addColorStop(0,'rgba(255,255,255,0.45)');
+      g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.globalCompositeOperation='lighter';
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.arc(0,-10,60,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
     this._drawLimb(p.lLegL,'lleg'); this._drawLimb(p.lLegR,'lleg');
     this._drawLimb(p.lArmL,'larm'); this._drawLimb(p.lArmR,'larm');
     this._drawLimb(p.uLegL,'uleg'); this._drawLimb(p.uLegR,'uleg');
@@ -711,6 +883,18 @@ class Ragdoll {
   }
 }
 
+function findNearestOpponent(self){
+  let closest=null, best=Infinity;
+  const myPos=self.parts.torso.position;
+  for(const rd of RAGDOLLS){
+    if(rd===self||rd.dead) continue;
+    const pos=rd.parts.torso.position;
+    const d=Math.hypot(pos.x-myPos.x,pos.y-myPos.y);
+    if(d<best){best=d; closest=rd;}
+  }
+  return closest;
+}
+
 // ═══════════════════════════════════════════════════════════════════
 //  WORLD SETUP
 // ═══════════════════════════════════════════════════════════════════
@@ -829,7 +1013,9 @@ function useTool(type,mx,my){
     case 'c4':      queueBoom(mx,my,'c4');      break;
     case 'clear':
       for(const r of RAGDOLLS) r.remove();
-      RAGDOLLS.length=0; BLOOD.length=0; DECALS.length=0; PENDING.length=0; break;
+      RAGDOLLS.length=0; BLOOD.length=0; DECALS.length=0; PENDING.length=0;
+      setSelectedRagdoll(null);
+      break;
   }
 }
 
@@ -895,10 +1081,22 @@ function drawCursor(){
 // ═══════════════════════════════════════════════════════════════════
 //  INPUT
 // ════════════════════════════════════════���══════════════════════════
+function findRagdollAt(x,y){
+  for(const rd of RAGDOLLS){
+    for(const b of Object.values(rd.parts)){
+      const dx=x-b.position.x, dy=y-b.position.y;
+      if(Math.sqrt(dx*dx+dy*dy)<22) return rd;
+    }
+  }
+  return null;
+}
+
 canvas.addEventListener('mousedown',e=>{
   ensureAudio();
   const r=canvas.getBoundingClientRect();
   MOUSE.x=e.clientX-r.left; MOUSE.y=e.clientY-r.top; MOUSE.down=true;
+  const hitRd=findRagdollAt(MOUSE.x,MOUSE.y);
+  if(hitRd) setSelectedRagdoll(hitRd);
 
   // Grab mode (default) — try to grab ragdoll parts OR crates
   if(activeTool==='grab'||!activeTool){
@@ -943,7 +1141,7 @@ canvas.addEventListener('mouseup',e=>{
 canvas.addEventListener('contextmenu',e=>e.preventDefault());
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ setTool('grab'); }
+  if(e.key==='Escape'){ setTool('grab'); setSelectedRagdoll(null); controlMenu.classList.remove('open'); }
   if(e.key==='r'||e.key==='R'){
     ensureAudio();
     RAGDOLLS.push(new Ragdoll(canvas.width*.5+(Math.random()-.5)*100,canvas.height*.3));
@@ -951,6 +1149,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='c'||e.key==='C'){
     for(const rd of RAGDOLLS) rd.remove();
     RAGDOLLS.length=0; BLOOD.length=0; DECALS.length=0; PENDING.length=0;
+    setSelectedRagdoll(null);
   }
 });
 
@@ -970,7 +1169,7 @@ setTool('grab');
 
 let dragGhost=null, dragType=null;
 
-document.querySelectorAll('.tool-btn').forEach(btn=>{
+document.querySelectorAll('.tool-btn[data-type]').forEach(btn=>{
   btn.addEventListener('mousedown',e=>{
     e.preventDefault();
     dragType=btn.dataset.type;
@@ -1027,6 +1226,10 @@ function loop(ts){
   const dt=ts-last; last=ts;
   if(dt>0) fps=Math.round(1000/dt);
   fc++;
+
+  if(selectedRagdoll && (selectedRagdoll.dead || !RAGDOLLS.includes(selectedRagdoll))){
+    setSelectedRagdoll(null);
+  }
 
   // Tick
   for(const r of RAGDOLLS) r.updateAI();
