@@ -392,6 +392,7 @@ function drawPending(){
 // ═══════════════════════════════════════════════════════════════════
 const RAGDOLLS=[];
 let kills=0;
+let ragdollGroupSeed=0;
 
 let selectedRagdoll=null;
 const selectionPanel=document.getElementById('selection-panel');
@@ -463,31 +464,36 @@ class Ragdoll {
     this.kneeStiff=0.07;
     this.hipStiff=0.06;
     this.supportMemory=0;
+    this.group=-(++ragdollGroupSeed);
     this._build(x,y);
   }
 
   _build(x,y){
-    const f={frictionAir:.04,friction:.6,restitution:.15,
-      collisionFilter:{category:0x0001,mask:0x0002}};
+    // Non-arm parts: collide with world AND other ragdolls' body parts
+    const fBody={frictionAir:.04,friction:.6,restitution:.15,
+      collisionFilter:{category:0x0001,mask:0x0001|0x0002,group:this.group}};
+    // Arm parts: only collide with world/environment, not other ragdoll parts
+    const fArm={frictionAir:.04,friction:.6,restitution:.15,
+      collisionFilter:{category:0x0004,mask:0x0002,group:this.group}};
     const p={
-      head:     Bodies.circle(x, y-92, 13, {...f,label:'head_'+this.id}),
-      neck:     Bodies.rectangle(x, y-74, 10,14, {...f,label:'neck_'+this.id}),
-      torso:    Bodies.rectangle(x, y-48, 28,44, {...f,density:.0025,label:'torso_'+this.id}),
-      pelvis:   Bodies.rectangle(x, y-13, 26,18, {...f,label:'pelvis_'+this.id}),
-      uArmL:    Bodies.rectangle(x-22, y-58, 11,30, {...f,label:'uArmL_'+this.id}),
-      lArmL:    Bodies.rectangle(x-22, y-24, 9,28,  {...f,label:'lArmL_'+this.id}),
-      uArmR:    Bodies.rectangle(x+22, y-58, 11,30, {...f,label:'uArmR_'+this.id}),
-      lArmR:    Bodies.rectangle(x+22, y-24, 9,28,  {...f,label:'lArmR_'+this.id}),
-      uLegL:    Bodies.rectangle(x-11, y+14, 14,36, {...f,label:'uLegL_'+this.id}),
-      lLegL:    Bodies.rectangle(x-11, y+52, 12,34, {...f,label:'lLegL_'+this.id}),
-      footL:    Bodies.rectangle(x-11, y+75, 20, 9, {...f,label:'footL_'+this.id}),
-      uLegR:    Bodies.rectangle(x+11, y+14, 14,36, {...f,label:'uLegR_'+this.id}),
-      lLegR:    Bodies.rectangle(x+11, y+52, 12,34, {...f,label:'lLegR_'+this.id}),
-      footR:    Bodies.rectangle(x+11, y+75, 20, 9, {...f,label:'footR_'+this.id}),
+      head:     Bodies.circle(x, y-92, 13, {...fBody,label:'head_'+this.id}),
+      neck:     Bodies.rectangle(x, y-74, 10,14, {...fBody,label:'neck_'+this.id}),
+      torso:    Bodies.rectangle(x, y-48, 28,44, {...fBody,density:.0025,label:'torso_'+this.id}),
+      pelvis:   Bodies.rectangle(x, y-13, 26,18, {...fBody,label:'pelvis_'+this.id}),
+      uArmL:    Bodies.rectangle(x-22, y-58, 11,30, {...fArm,label:'uArmL_'+this.id}),
+      lArmL:    Bodies.rectangle(x-22, y-24, 9,28,  {...fArm,label:'lArmL_'+this.id}),
+      uArmR:    Bodies.rectangle(x+22, y-58, 11,30, {...fArm,label:'uArmR_'+this.id}),
+      lArmR:    Bodies.rectangle(x+22, y-24, 9,28,  {...fArm,label:'lArmR_'+this.id}),
+      uLegL:    Bodies.rectangle(x-11, y+14, 14,36, {...fBody,label:'uLegL_'+this.id}),
+      lLegL:    Bodies.rectangle(x-11, y+52, 12,34, {...fBody,label:'lLegL_'+this.id}),
+      footL:    Bodies.rectangle(x-11, y+75, 20, 9, {...fBody,label:'footL_'+this.id}),
+      uLegR:    Bodies.rectangle(x+11, y+14, 14,36, {...fBody,label:'uLegR_'+this.id}),
+      lLegR:    Bodies.rectangle(x+11, y+52, 12,34, {...fBody,label:'lLegR_'+this.id}),
+      footR:    Bodies.rectangle(x+11, y+75, 20, 9, {...fBody,label:'footR_'+this.id}),
     };
     this.parts=p;
 
-    const C=(bA,bB,pA,pB,s=.55)=>Constraint.create({bodyA:bA,bodyB:bB,pointA:pA,pointB:pB,length:0,stiffness:s});
+    const C=(bA,bB,pA,pB,s=.30)=>Constraint.create({bodyA:bA,bodyB:bB,pointA:pA,pointB:pB,length:0,stiffness:s});
     const cons=[
       C(p.head,  p.neck,   {x:0,y:13}, {x:0,y:-7}),          // 0 head-neck
       C(p.neck,  p.torso,  {x:0,y:7},  {x:0,y:-22}),         // 1 neck-torso
@@ -580,7 +586,9 @@ class Ragdoll {
 
   _muscle(body,target,stiff=0.08,damp=0.86){
     if(!body) return;
-    const err=target-body.angle;
+    let err=target-body.angle;
+    // Normalize to [-PI, PI] so a body that has spun around never gets a huge correction
+    err=((err%(Math.PI*2))+Math.PI*3)%(Math.PI*2)-Math.PI;
     Body.setAngularVelocity(body, body.angularVelocity*damp + err*stiff);
   }
 
@@ -609,22 +617,20 @@ class Ragdoll {
 
     // Lean torso slightly back while seated
     const targetTorso=-0.2;
-    Body.setAngularVelocity(torso, torso.angularVelocity*0.82 + (targetTorso-torso.angle)*0.08);
-    Body.setAngularVelocity(pelvis, pelvis.angularVelocity*0.82 + ((targetTorso*0.6)-pelvis.angle)*0.05);
+    this._muscle(torso, targetTorso, 0.08, 0.82);
+    this._muscle(pelvis, targetTorso*0.6, 0.05, 0.82);
 
     // Keep head upright
-    if(p.head){
-      Body.setAngularVelocity(p.head, p.head.angularVelocity*0.82 + (-p.head.angle*0.08));
-    }
+    this._muscle(p.head, 0, 0.08, 0.82);
 
     const legSets=[
       [p.uLegL,p.lLegL,p.footL],
       [p.uLegR,p.lLegR,p.footR]
     ];
     for(const [u,l,f] of legSets){
-      if(u) Body.setAngularVelocity(u, u.angularVelocity*0.8 + ((1.2)-u.angle)*0.06);
-      if(l) Body.setAngularVelocity(l, l.angularVelocity*0.82 + ((-1.1)-l.angle)*0.05);
-      if(f) Body.setAngularVelocity(f, f.angularVelocity*0.85 + ((-0.2)-f.angle)*0.05);
+      this._muscle(u, 1.2, 0.06, 0.8);
+      this._muscle(l, -1.1, 0.05, 0.82);
+      this._muscle(f, -0.2, 0.05, 0.85);
     }
 
     const armSets=[
@@ -632,8 +638,8 @@ class Ragdoll {
       [p.uArmR,p.lArmR,-0.25]
     ];
     for(const [u,l,target] of armSets){
-      if(u) Body.setAngularVelocity(u, u.angularVelocity*0.86 + (target-u.angle)*0.04);
-      if(l) Body.setAngularVelocity(l, l.angularVelocity*0.9 + (-l.angle*0.04));
+      this._muscle(u, target, 0.04, 0.86);
+      this._muscle(l, 0, 0.04, 0.9);
     }
 
     const targetSeatY=floorY-36;
@@ -705,8 +711,8 @@ class Ragdoll {
       if(!c.body) continue;
       if(c.on){
         const depth=Math.max(0,(c.body.position.y-(c.surfaceY-10)));
-        const up=0.004+depth*0.0006;
-        Body.applyForce(c.body,c.body.position,{x:-c.body.velocity.x*0.004,y:-up});
+        const up=0.006+depth*0.001;
+        Body.applyForce(c.body,c.body.position,{x:-c.body.velocity.x*0.006,y:-up});
       }
     }
 
@@ -714,19 +720,19 @@ class Ragdoll {
     const targetPelvisY=supportTop-44;
     const diffY=p.pelvis.position.y-targetPelvisY;
     Body.applyForce(p.pelvis,p.pelvis.position,{
-      x:-leanErr*0.0009,
-      y:-0.0026*Math.max(Math.min(diffY,22),-22)
+      x:-leanErr*0.001,
+      y:-0.004*Math.max(Math.min(diffY,22),-22)
     });
 
     // Recovery if sprawled
-    if(!supported.length && this.aiTick % 35 === 0){
+    if(!supported.length && this.aiTick % 20 === 0){
       const torsoAngle=torso.angle;
       Body.applyForce(torso, torso.position, {
-        x: -Math.sin(torsoAngle) * 0.004,
-        y: -0.0032
+        x: -Math.sin(torsoAngle) * 0.008,
+        y: -0.005
       });
-      if(p.footL) Body.applyForce(p.footL,p.footL.position,{x:-0.0015,y:-0.002});
-      if(p.footR) Body.applyForce(p.footR,p.footR.position,{x:0.0015,y:-0.002});
+      if(p.footL) Body.applyForce(p.footL,p.footL.position,{x:-0.003,y:-0.004});
+      if(p.footR) Body.applyForce(p.footR,p.footR.position,{x:0.003,y:-0.004});
     }
 
     // Reduce sliding once upright
@@ -760,7 +766,7 @@ class Ragdoll {
     const torsoPos=p.torso.position;
     const dir=Math.sign(tPos.x-torsoPos.x)||1;
     Body.applyForce(p.pelvis,p.pelvis.position,{x:dir*0.0026,y:-0.0007});
-    Body.setAngularVelocity(p.torso,p.torso.angularVelocity*0.88 + (-(p.torso.angle - dir*0.06))*0.05);
+    this._muscle(p.torso, dir*0.06, 0.05, 0.88);
     const dist=Math.hypot(tPos.x-torsoPos.x,tPos.y-torsoPos.y);
     if(dist<80 && this.attackCooldown<=0){
       target.hurt(12,target.parts.torso,'torso');
@@ -948,7 +954,7 @@ function buildWorld(){
   // Crates (NOW DYNAMIC so they can be grabbed and moved)
   const crateOpts={isStatic:false,friction:.8,restitution:.1,density:.004,
     frictionAir:.02,
-    collisionFilter:{category:0x0002,mask:0x0001|0x0002}};
+    collisionFilter:{category:0x0002,mask:0x0001|0x0002|0x0004}};
   for(let i=0;i<4;i++){
     const cw=40+Math.random()*30, ch=40+Math.random()*30;
     const b=Bodies.rectangle(
