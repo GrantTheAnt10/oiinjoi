@@ -5,7 +5,7 @@
 <title>RAGDOLL PLAYGROUND</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none;}
 body{background:#0a0a0f;overflow:hidden;display:flex;font-family:'Share Tech Mono',monospace;cursor:none;}
 #sidebar{
   width:88px;min-width:88px;background:linear-gradient(180deg,#111118 0%,#0d0d14 100%);
@@ -146,9 +146,14 @@ resize();
 window.addEventListener('resize', resize);
 
 const { Engine, Runner, Bodies, Body, Composite, Constraint, Vector, Events } = Matter;
-const engine = Engine.create({ gravity:{ x:0, y:2.0 } });
+const engine = Engine.create({
+  gravity:{ x:0, y:1.0 },
+  positionIterations: 10,
+  velocityIterations: 8,
+  constraintIterations: 4
+});
 const world  = engine.world;
-const runner = Runner.create();
+const runner = Runner.create({ delta: 1000/60, isFixed: true });
 Runner.run(runner, engine);
 
 // ═══════════════════════════════════════════════════════════════════
@@ -494,7 +499,7 @@ class Ragdoll {
     };
     this.parts=p;
 
-    const C=(bA,bB,pA,pB,s=.30)=>Constraint.create({bodyA:bA,bodyB:bB,pointA:pA,pointB:pB,length:0,stiffness:s});
+    const C=(bA,bB,pA,pB,s=.6)=>Constraint.create({bodyA:bA,bodyB:bB,pointA:pA,pointB:pB,length:0,stiffness:s,damping:0.05});
     const cons=[
       C(p.head,  p.neck,   {x:0,y:13}, {x:0,y:-7}),          // 0 head-neck
       C(p.neck,  p.torso,  {x:0,y:7},  {x:0,y:-22}),         // 1 neck-torso
