@@ -150,7 +150,7 @@ window.addEventListener('resize', resize);
 
 const { Engine, Runner, Bodies, Body, Composite, Constraint, Vector, Events } = Matter;
 const engine = Engine.create({
-  gravity:{ x:0, y:0.5 },
+  gravity:{ x:0, y:1.0 },
   positionIterations: 10,
   velocityIterations: 8,
   constraintIterations: 8
@@ -496,10 +496,10 @@ class Ragdoll {
   _build(x,y){
     // Non-arm parts: collide with world (0x0002) AND other ragdolls' body parts (0x0001).
     // Negative group prevents parts of the same ragdoll from colliding with each other.
-    const fBody={frictionAir:.07,friction:.6,restitution:.15,
+    const fBody={frictionAir:.09,friction:.6,restitution:.15,
       collisionFilter:{category:0x0001,mask:0x0001|0x0002,group:this.group}};
     // Arm parts: only collide with world/environment (0x0002), not other ragdoll parts.
-    const fArm={frictionAir:.07,friction:.6,restitution:.15,
+    const fArm={frictionAir:.09,friction:.6,restitution:.15,
       collisionFilter:{category:0x0004,mask:0x0002,group:this.group}};
     const p={
       head:     Bodies.circle(x, y-92, 13, {...fBody,label:'head_'+this.id}),
@@ -775,7 +775,7 @@ class Ragdoll {
       if(!c.body) continue;
       if(c.on){
         const depth=Math.max(0,(c.body.position.y-(c.surfaceY-10)));
-        const up=0.006+depth*0.001;
+        const up=0.008+depth*0.001;
         Body.applyForce(c.body,c.body.position,{x:-c.body.velocity.x*0.006,y:-up});
       }
     }
@@ -785,7 +785,7 @@ class Ragdoll {
     const diffY=p.pelvis.position.y-targetPelvisY;
     Body.applyForce(p.pelvis,p.pelvis.position,{
       x:-leanErr*0.001,
-      y:-0.004*Math.max(Math.min(diffY,22),-22)
+      y:-0.004*Math.max(Math.min(diffY,22),0)
     });
 
     // Recovery if sprawled
