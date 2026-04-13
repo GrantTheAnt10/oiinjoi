@@ -457,6 +457,12 @@ class Ragdoll {
     this.wanderDir=0;
     this.wanderTimer=0;
     this.attackCooldown=0;
+    this.stanceWidth=26+Math.random()*8;
+    this.balanceLeanGain=0.02;
+    this.ankleStiff=0.08;
+    this.kneeStiff=0.07;
+    this.hipStiff=0.06;
+    this.supportMemory=0;
     this._build(x,y);
   }
 
@@ -572,6 +578,30 @@ class Ragdoll {
     if(this.behavior==='berserk') this._berserkMotion();
   }
 
+  _muscle(body,target,stiff=0.08,damp=0.86){
+    if(!body) return;
+    const err=target-body.angle;
+    Body.setAngularVelocity(body, body.angularVelocity*damp + err*stiff);
+  }
+
+  _footContact(foot,floorY){
+    if(!foot) return {body:null,on:false,surfaceY:floorY};
+    let on=foot.position.y>floorY-16;
+    let surfaceY=floorY;
+    const checkSurface=(surf)=>{
+      const top=surf.bounds.min.y, left=surf.bounds.min.x-12, right=surf.bounds.max.x+12;
+      if(foot.position.x>left && foot.position.x<right && foot.position.y>top-22 && foot.position.y<top+26){
+        on=true; surfaceY=Math.min(surfaceY, top);
+      }
+    };
+    for(const s of STATICS){
+      if(s.label==='floor'||s.label==='wall'||s.label==='ceil') continue;
+      checkSurface(s);
+    }
+    for(const s of CRATES) checkSurface(s);
+    return {body:foot,on,surfaceY};
+  }
+
   _applySitPose(){
     const p=this.parts;
     const torso=p.torso, pelvis=p.pelvis;
@@ -621,90 +651,87 @@ class Ragdoll {
     const torso = p.torso;
     const pelvis = p.pelvis;
     const floorY = canvas.height - 20;
-
-    // ─── Torso: strongly correct angle toward 0 (upright) ───
-    const torsoAngle = torso.angle;
-    const torsoCorrection = -torsoAngle * 0.06;
-    Body.setAngularVelocity(torso, torso.angularVelocity * 0.85 + torsoCorrection);
-
-    // ─── Pelvis: keep upright ───
-    const pelvisAngle = pelvis.angle;
-    Body.setAngularVelocity(pelvis, pelvis.angularVelocity * 0.85 + (-pelvisAngle * 0.05));
-
-    // ─── Head: keep upright ───
-    if(p.head){
-      const headAngle = p.head.angle;
-      Body.setAngularVelocity(p.head, p.head.angularVelocity * 0.8 + (-headAngle * 0.08));
-    }
-
-    // ─── Legs: straighten toward downward (angle 0) ───
-    const legParts = [
-      [p.uLegL, p.lLegL, p.footL],
-      [p.uLegR, p.lLegR, p.footR]
+    const contacts=[
+      this._footContact(p.footL,floorY),
+      this._footContact(p.footR,floorY)
     ];
-    for(const [uLeg, lLeg, foot] of legParts){
-      if(uLeg){
-        Body.setAngularVelocity(uLeg, uLeg.angularVelocity * 0.8 + (-uLeg.angle * 0.05));
-      }
-      if(lLeg){
-        Body.setAngularVelocity(lLeg, lLeg.angularVelocity * 0.8 + (-lLeg.angle * 0.05));
-      }
-      if(foot){
-        Body.setAngularVelocity(foot, foot.angularVelocity * 0.8 + (-foot.angle * 0.08));
+    const supported=contacts.filter(c=>c.body&&c.on);
+    const supportX=supported.length
+      ? supported.reduce((a,c)=>a+c.body.position.x,0)/supported.length
+      : pelvis.position.x;
+    const supportTop=supported.length
+      ? Math.min(...supported.map(c=>c.surfaceY))
+      : floorY;
+    const centerX=p.torso.position.x*0.6+p.pelvis.position.x*0.4;
+    const leanErr=centerX-supportX;
+    this.supportMemory=this.supportMemory*0.9+(supported.length?0.1:0);
+
+    // Upright muscles
+    this._muscle(torso, -leanErr*0.1, 0.09, 0.84);
+    this._muscle(pelvis, -leanErr*0.08, 0.07, 0.85);
+    if(p.head) this._muscle(p.head, -leanErr*0.12, 0.09, 0.8);
+
+    // Leg muscles with simple PD hips/knees/ankles
+    const hipBase=-0.05 - leanErr*this.balanceLeanGain;
+    const kneeBase=0.28 + Math.abs(leanErr)*0.05;
+    const ankleBase=-0.05 - leanErr*0.04;
+    const stance=this.stanceWidth;
+    const legs=[
+      {u:p.uLegL,l:p.lLegL,f:p.footL,side:-1},
+      {u:p.uLegR,l:p.lLegR,f:p.footR,side:1}
+    ];
+    for(const leg of legs){
+      if(leg.u) this._muscle(leg.u, hipBase+leg.side*0.08, this.hipStiff, 0.86);
+      if(leg.l) this._muscle(leg.l, kneeBase, this.kneeStiff, 0.86);
+      if(leg.f) this._muscle(leg.f, ankleBase+leg.side*0.04, this.ankleStiff, 0.84);
+      if(leg.f){
+        const targetX=supportX+leg.side*(stance*0.5);
+        Body.applyForce(leg.f, leg.f.position,{x:(targetX-leg.f.position.x)*0.0007,y:0});
       }
     }
 
-    // ─── Arms: let them dangle slightly (angle toward ~0.3 outward) ───
+    // Arms stay loose for balance
     const armSets = [
-      [p.uArmL, p.lArmL, 0.15],
-      [p.uArmR, p.lArmR, -0.15]
+      [p.uArmL, p.lArmL, 0.18],
+      [p.uArmR, p.lArmR, -0.18]
     ];
     for(const [uArm, lArm, restAngle] of armSets){
-      if(uArm){
-        Body.setAngularVelocity(uArm, uArm.angularVelocity * 0.9 + (-(uArm.angle - restAngle) * 0.02));
-      }
-      if(lArm){
-        Body.setAngularVelocity(lArm, lArm.angularVelocity * 0.9 + (-lArm.angle * 0.015));
+      if(uArm) this._muscle(uArm, restAngle, 0.03, 0.9);
+      if(lArm) this._muscle(lArm, 0, 0.025, 0.9);
+    }
+
+    // Ground reaction through feet instead of torso hovering
+    for(const c of contacts){
+      if(!c.body) continue;
+      if(c.on){
+        const depth=Math.max(0,(c.body.position.y-(c.surfaceY-10)));
+        const up=0.004+depth*0.0006;
+        Body.applyForce(c.body,c.body.position,{x:-c.body.velocity.x*0.004,y:-up});
       }
     }
 
-    // ─── Upward support force: if feet are near ground, push torso up ───
-    const feetOnGround = [p.footL, p.footR].some(f => f && f.position.y > floorY - 18);
-    // Also check if standing on a platform
-    const onPlatform = [p.footL, p.footR, p.lLegL, p.lLegR].some(f => {
-      if(!f) return false;
-      for(const s of STATICS){
-        if(s.label==='floor'||s.label==='wall'||s.label==='ceil') continue;
-        const dx = Math.abs(f.position.x - s.position.x);
-        const dy = f.position.y - s.position.y;
-        const hw = (s.bounds.max.x - s.bounds.min.x)/2 + 15;
-        if(dx < hw && dy < 0 && dy > -25) return true;
-      }
-      return false;
+    // Keep pelvis over support region
+    const targetPelvisY=supportTop-44;
+    const diffY=p.pelvis.position.y-targetPelvisY;
+    Body.applyForce(p.pelvis,p.pelvis.position,{
+      x:-leanErr*0.0009,
+      y:-0.0026*Math.max(Math.min(diffY,22),-22)
     });
 
-    if(feetOnGround || onPlatform){
-      // Apply gentle upward force to torso to keep it "standing"
-      const targetY = (feetOnGround ? floorY : pelvis.position.y) - 80;
-      const diffY = torso.position.y - targetY;
-      if(diffY > 5){
-        Body.applyForce(torso, torso.position, {x: 0, y: -0.004 * Math.min(diffY * 0.1, 1)});
-      }
-      // Dampen horizontal sliding
-      if(Math.abs(torso.velocity.x) > 0.5){
-        Body.setVelocity(torso, {x: torso.velocity.x * 0.95, y: torso.velocity.y});
-      }
+    // Recovery if sprawled
+    if(!supported.length && this.aiTick % 35 === 0){
+      const torsoAngle=torso.angle;
+      Body.applyForce(torso, torso.position, {
+        x: -Math.sin(torsoAngle) * 0.004,
+        y: -0.0032
+      });
+      if(p.footL) Body.applyForce(p.footL,p.footL.position,{x:-0.0015,y:-0.002});
+      if(p.footR) Body.applyForce(p.footR,p.footR.position,{x:0.0015,y:-0.002});
     }
 
-    // ─── Recovery: if knocked over, try to get back up ───
-    if(this.aiTick % 30 === 0){
-      // If torso is very tilted, give a corrective push
-      if(Math.abs(torsoAngle) > 0.8){
-        Body.applyForce(torso, torso.position, {
-          x: -Math.sin(torsoAngle) * 0.003,
-          y: -0.003
-        });
-      }
+    // Reduce sliding once upright
+    if(supported.length && Math.abs(torso.velocity.x) > 0.6){
+      Body.setVelocity(torso,{x:torso.velocity.x*0.94,y:torso.velocity.y});
     }
   }
 
