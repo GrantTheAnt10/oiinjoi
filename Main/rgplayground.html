@@ -159,6 +159,13 @@ const world  = engine.world;
 const runner = Runner.create({ delta: 1000/60, isFixed: true });
 Runner.run(runner, engine);
 
+// Kinematic stand: enforce the standing pose before every physics step
+Events.on(engine,'beforeUpdate',()=>{
+  for(const rd of RAGDOLLS){
+    if(!rd.dead && rd.behavior==='stand') rd._applyStandKinematic();
+  }
+});
+
 // ═══════════════════════════════════════════════════════════════════
 //  AUDIO
 // ═══════════════════════════════════════════════════════════════════
@@ -416,6 +423,7 @@ const RD_STRING_LEN=55;     // rest length of the invisible upright string
 const RD_STANDING_HEIGHT=226.5; // supportTop - RD_STANDING_HEIGHT = anchor Y when standing
 
 let selectedRagdoll=null;
+let selectedPart=null;
 const selectionPanel=document.getElementById('selection-panel');
 const selectionButton=document.getElementById('selection-button');
 const selectionButtonLabel=document.getElementById('selection-button-label');
@@ -430,6 +438,7 @@ function updateBehaviorButtons(mode){
 
 function setSelectedRagdoll(rd){
   selectedRagdoll=rd && !rd.dead ? rd : null;
+  selectedPart=null;
   if(selectedRagdoll){
     selectionPanel.classList.add('active');
     selectionButtonLabel.textContent='Control Dummy';
@@ -490,6 +499,7 @@ class Ragdoll {
     this.fleeTarget=null;
     this.fleeCooldown=0;
     this.group=-(++ragdollGroupSeed);
+    this.standX=x;
     this._build(x,y);
   }
 
@@ -617,9 +627,43 @@ class Ragdoll {
     if(this.behavior==='flee') this.fleeCooldown=300;
   }
 
+  // ── Kinematic standing pose (called from beforeUpdate event) ───
+  _applyStandKinematic(){
+    if(Object.values(this.parts).some(b=>b===grabbedBody)) return;
+    const floorY=canvas.height-20;
+    const x=this.standX;
+    const y=floorY-80; // build-origin Y that places feet on the visual floor
+    const set=(b,px,py,angle=0)=>{
+      if(!b) return;
+      Body.setPosition(b,{x:px,y:py});
+      Body.setAngle(b,angle);
+      Body.setVelocity(b,{x:0,y:0});
+      Body.setAngularVelocity(b,0);
+    };
+    const p=this.parts;
+    set(p.head,   x,      y-92);
+    set(p.neck,   x,      y-74);
+    set(p.torso,  x,      y-48);
+    set(p.pelvis, x,      y-13);
+    set(p.uArmL,  x-22,   y-58, 0.2);
+    set(p.lArmL,  x-22,   y-24);
+    set(p.uArmR,  x+22,   y-58,-0.2);
+    set(p.lArmR,  x+22,   y-24);
+    set(p.uLegL,  x-11,   y+14);
+    set(p.lLegL,  x-11,   y+52);
+    set(p.footL,  x-11,   y+75);
+    set(p.uLegR,  x+11,   y+14);
+    set(p.lLegR,  x+11,   y+52);
+    set(p.footR,  x+11,   y+75);
+    if(this.uprightAnchor)
+      Body.setPosition(this.uprightAnchor,{x,y:y-92-RD_STRING_LEN});
+  }
+
   // ── NEW: Full standing AI + behaviors ───────────────────────────
   updateAI(){
     if(this.dead) return;
+    // Stand behavior is handled by the beforeUpdate kinematic correction
+    if(this.behavior==='stand') return;
     // Update upright anchor position to track torso X, fixed standing height above surface
     if(this.uprightAnchor){
       const fY=canvas.height-20;
@@ -858,18 +902,6 @@ class Ragdoll {
 
   draw(){
     const p=this.parts;
-    if(selectedRagdoll===this){
-      ctx.save();
-      const center=p.torso.position;
-      ctx.translate(center.x,center.y);
-      const g=ctx.createRadialGradient(0,0,18,0,0,70);
-      g.addColorStop(0,'rgba(255,255,255,0.45)');
-      g.addColorStop(1,'rgba(255,255,255,0)');
-      ctx.globalCompositeOperation='lighter';
-      ctx.fillStyle=g;
-      ctx.beginPath(); ctx.arc(0,-10,60,0,Math.PI*2); ctx.fill();
-      ctx.restore();
-    }
     this._drawLimb(p.lLegL,'lleg'); this._drawLimb(p.lLegR,'lleg');
     this._drawLimb(p.lArmL,'larm'); this._drawLimb(p.lArmR,'larm');
     this._drawLimb(p.uLegL,'uleg'); this._drawLimb(p.uLegR,'uleg');
@@ -902,6 +934,11 @@ class Ragdoll {
     ctx.strokeStyle='rgba(0,0,0,.4)'; ctx.lineWidth=1; ctx.stroke();
     ctx.fillStyle='rgba(255,255,255,.08)';
     rr(ctx,-w/2+1,-h/2+1,w*.4,h*.55,w*.15); ctx.fill();
+    if(b===selectedPart){
+      ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=2.5;
+      ctx.shadowColor='transparent'; ctx.shadowBlur=0;
+      rr(ctx,-w/2,-h/2,w,h,Math.min(w,h)*.32); ctx.stroke();
+    }
     ctx.restore();
   }
 
@@ -919,6 +956,11 @@ class Ragdoll {
       ctx.fillStyle=`rgba(139,0,0,${.35*(1-this.hp/60)})`;
       rr(ctx,-w/2,-h/2,w,h,6); ctx.fill();
     }
+    if(b===selectedPart){
+      ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=2.5;
+      ctx.shadowColor='transparent'; ctx.shadowBlur=0;
+      rr(ctx,-w/2,-h/2,w,h,6); ctx.stroke();
+    }
     ctx.restore();
   }
 
@@ -928,6 +970,11 @@ class Ragdoll {
     ctx.fillStyle=this.pants;
     rr(ctx,-13,-9,26,18,4); ctx.fill();
     ctx.strokeStyle='rgba(0,0,0,.4)'; ctx.lineWidth=1; ctx.stroke();
+    if(b===selectedPart){
+      ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=2.5;
+      ctx.shadowColor='transparent'; ctx.shadowBlur=0;
+      rr(ctx,-13,-9,26,18,4); ctx.stroke();
+    }
     ctx.restore();
   }
 
@@ -960,6 +1007,11 @@ class Ragdoll {
     else if(this.hp<40){ ctx.arc(0,7,3,0,Math.PI); }
     else { ctx.arc(0,5,3,Math.PI,0); }
     ctx.stroke();
+    if(b===selectedPart){
+      ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=2.5;
+      ctx.shadowColor='transparent'; ctx.shadowBlur=0;
+      ctx.beginPath(); ctx.arc(0,0,13,0,Math.PI*2); ctx.stroke();
+    }
     ctx.restore();
   }
 
@@ -1196,11 +1248,11 @@ function drawCursor(){
 // ═══════════════════════════════════════════════════════════════════
 //  INPUT
 // ════════════════════════════════════════���══════════════════════════
-function findRagdollAt(x,y){
+function findBodyPartAt(x,y){
   for(const rd of RAGDOLLS){
     for(const b of Object.values(rd.parts)){
       const dx=x-b.position.x, dy=y-b.position.y;
-      if(Math.sqrt(dx*dx+dy*dy)<22) return rd;
+      if(Math.sqrt(dx*dx+dy*dy)<22) return {rd,part:b};
     }
   }
   return null;
@@ -1210,18 +1262,13 @@ canvas.addEventListener('mousedown',e=>{
   ensureAudio();
   const r=canvas.getBoundingClientRect();
   MOUSE.x=e.clientX-r.left; MOUSE.y=e.clientY-r.top; MOUSE.down=true;
-  const hitRd=findRagdollAt(MOUSE.x,MOUSE.y);
-  if(hitRd) setSelectedRagdoll(hitRd);
+  const hitResult=findBodyPartAt(MOUSE.x,MOUSE.y);
+  if(hitResult){ setSelectedRagdoll(hitResult.rd); selectedPart=hitResult.part; }
 
   // Grab mode (default) — try to grab ragdoll parts OR crates
   if(activeTool==='grab'||!activeTool){
-    // First check ragdoll parts
-    for(const rd of RAGDOLLS){
-      for(const b of Object.values(rd.parts)){
-        const dx=MOUSE.x-b.position.x, dy=MOUSE.y-b.position.y;
-        if(Math.sqrt(dx*dx+dy*dy)<22){ grabbedBody=b; return; }
-      }
-    }
+    // Use already-found ragdoll part hit
+    if(hitResult){ grabbedBody=hitResult.part; return; }
     // Then check crates
     for(const b of CRATES){
       const dx=MOUSE.x-b.position.x, dy=MOUSE.y-b.position.y;
@@ -1248,6 +1295,11 @@ canvas.addEventListener('mousemove',e=>{
 canvas.addEventListener('mouseup',e=>{
   MOUSE.down=false;
   if(grabbedBody){
+    // Update standX so a standing dummy stays at its new horizontal position after being moved
+    const rd=RAGDOLLS.find(r=>Object.values(r.parts).includes(grabbedBody));
+    if(rd && rd.behavior==='stand' && rd.parts.torso){
+      rd.standX=rd.parts.torso.position.x;
+    }
     Body.setVelocity(grabbedBody,{x:(MOUSE.x-grabbedBody.position.x)*.3,y:(MOUSE.y-grabbedBody.position.y)*.3});
     grabbedBody=null;
   }
