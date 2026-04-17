@@ -1,0 +1,721 @@
+Let me start by reading the PPTX skill and then examining the uploaded file.Reading PPTX skillLet me read the editing.md file for the PPTX skill.Reading editing guideNow let me read the pptxgenjs.md file and then extract the existing PPTX content.DoneNow let me extract the content from the existing presentation:Architected comprehensive presentation with web images and authentic student voiceArchitected comprehensive presentation with web images and authentic student voiceExtract text from uploaded PPTXbashextract-text /mnt/user-data/uploads/Evidence_of_Evolution.pptxOutput## Slide 1
+
+Evidence of Evolution
+
+A Look at 5 Types of Scientific Evidence
+
+Paleontology  ·  Biogeography  ·  Embryology  ·  Anatomy  ·  Biochemistry
+
+## Slide 2
+
+Paleontology
+
+Paleontology studies fossils — the preserved remains of ancient life. Fossils show how living things changed over millions of years.
+
+Examples:  Archaeopteryx  ·  Tiktaalik  ·  Ambulocetus
+
+## Slide 3
+
+Paleontology – Archaeopteryx
+
+[ Image: Archaeopteryx ]
+
+Source: Britannica – Archaeopteryx (britannica.com)
+
+Description
+
+• Lived about 150 million years ago
+• Had feathers AND bone wings like a bird, but also had teeth and clawed fingers like a dinosaur
+• Found in limestone rocks in Germany
+
+How does this support evolution?
+
+Archaeopteryx shows features of both dinosaurs and modern birds in the same animal. This supports evolution because it is a 'transition fossil' — evidence that birds slowly evolved from small feathered dinosaurs over a long time.
+
+## Slide 4
+
+Paleontology – Tiktaalik
+
+[ Image: Tiktaalik ]
+
+Source: National Geographic – Tiktaalik (nationalgeographic.com)
+
+Description
+
+• Lived about 375 million years ago in shallow water
+• Had fins, but the fins had bones that looked like an arm and wrist
+• Also had a flat head and a neck — features fish do not have
+
+How does this support evolution?
+
+Tiktaalik shows a step between fish that swim and land animals that walk. Its fin-arms support the idea that land animals evolved from fish that slowly developed limbs.
+
+## Slide 5
+
+Paleontology – Ambulocetus
+
+[ Image: Ambulocetus ]
+
+Source: Khan Academy – Evidence of Evolution (khanacademy.org)
+
+Description
+
+• Lived about 48 million years ago
+• Had four legs but could also swim by moving its spine up and down
+• Related to early ancestors of modern whales
+
+How does this support evolution?
+
+Ambulocetus is a 'walking whale' fossil that shows whales once lived on land. This supports evolution by showing that today's ocean-living whales came from four-legged land animals over millions of years.
+
+## Slide 6
+
+Biogeography
+
+Biogeography studies where animals and plants live around the world. The pattern of where species are found helps show how they evolved in different places.
+
+Examples:  Darwin's Finches  ·  Marsupials in Australia  ·  Cichlid Fish in African Lakes
+
+## Slide 7
+
+Biogeography – Darwin's Finches
+
+[ Image: Darwin's Finches ]
+
+Source: Khan Academy – Darwin's Finches (khanacademy.org)
+
+Description
+
+• Found on the Galápagos Islands in the Pacific Ocean
+• 14 different species of finch, each with a different beak shape
+• Each beak shape is matched to the food on that island (seeds, insects, cactus)
+
+How does this support evolution?
+
+All 14 finch species came from a single finch ancestor that arrived on the islands long ago. Over time, different groups changed to fit their local food source — this is a clear example of evolution through natural selection.
+
+## Slide 8
+
+Biogeography – Marsupials in Australia
+
+[ Image: Marsupials in Australia ]
+
+Source: Britannica – Marsupial (britannica.com)
+
+Description
+
+• Marsupials (like kangaroos and koalas) are mostly found in Australia
+• Australia separated from other continents about 45 million years ago
+• Marsupials evolved on their own, isolated from placental mammals elsewhere
+
+How does this support evolution?
+
+Because Australia was cut off from the rest of the world, its animals evolved separately. The huge variety of marsupials found only there supports the idea that isolation leads to unique evolutionary paths.
+
+## Slide 9
+
+Biogeography – Cichlid Fish in African Lakes
+
+[ Image: Cichlid Fish in African Lakes ]
+
+Source: National Geographic – Cichlid Evolution (nationalgeographic.com)
+
+Description
+
+• Over 500 species of cichlid fish live in Africa's Great Lakes
+• Each species evolved to eat a different type of food in the lake
+• All species came from just a few common ancestors
+
+How does this support evolution?
+
+Cichlid fish are a great example of rapid evolution in one location. Because they were isolated in separate lakes, small groups evolved into hundreds of different species — each one shaped by its environment.
+
+## Slide 10
+
+Embryology
+
+Embryology is the study of how embryos (early-stage babies) develop. Related animals often look very similar as embryos, showing their shared past.
+
+Examples:  Pharyngeal Pouches  ·  Tail in Human Embryos  ·  Limb Bud Development
+
+## Slide 11
+
+Embryology – Pharyngeal Pouches
+
+[ Image: Pharyngeal Pouches ]
+
+Source: Khan Academy – Embryology and Evolution (khanacademy.org)
+
+Description
+
+• Fish, frogs, chickens, pigs, and humans all have pharyngeal pouches as embryos
+• In fish, these pouches become gills
+• In humans, they become parts of the ear and throat
+
+How does this support evolution?
+
+The fact that very different animals all start with the same structures in their embryos shows that they share a common ancestor. Over time, evolution shaped those same starting structures into different body parts.
+
+## Slide 12
+
+Embryology – Tail in Human Embryos
+
+[ Image: Tail in Human Embryos ]
+
+Source: Britannica – Human Embryo Development (britannica.com)
+
+Description
+
+• Human embryos grow a small tail between weeks 4 and 8 of development
+• The tail is then absorbed back into the body before birth
+• This tail structure matches the tails seen in other vertebrate embryos
+
+How does this support evolution?
+
+The temporary tail in human embryos shows our connection to other animals that have tails. It is a sign left over from ancestors we shared with other mammals millions of years ago.
+
+## Slide 13
+
+Embryology – Limb Bud Development
+
+[ Image: Limb Bud Development ]
+
+Source: NCBI / National Institutes of Health – Limb Development (ncbi.nlm.nih.gov)
+
+Description
+
+• All vertebrate embryos (frogs, birds, mice, humans) grow limb buds in the same basic way
+• The same genes control limb growth in all these animals
+• The limb buds develop into arms, wings, flippers, or legs depending on the species
+
+How does this support evolution?
+
+Because the same genes and the same early stages are used to grow limbs in very different animals, they must have come from a shared ancestor. Evolution changed how those limbs ended up — not how they started.
+
+## Slide 14
+
+Anatomy
+
+Anatomy is the study of body structures. Comparing body parts across different animals reveals shared ancestry and how species have changed over time.
+
+Examples:  Homologous Structures  ·  Vestigial Structures – Human Tailbone  ·  Analogous Structures – Wings
+
+## Slide 15
+
+Anatomy – Homologous Structures
+
+[ Image: Homologous Structures ]
+
+Source: Khan Academy – Homologous Structures (khanacademy.org)
+
+Description
+
+• Humans, bats, whales, and cats all have the same set of arm/hand bones
+• The bones are used for very different things — grabbing, flying, swimming, walking
+• The bones look different on the outside but have the same inner structure
+
+How does this support evolution?
+
+Having the same bones arranged in the same way shows these animals evolved from a common ancestor. Evolution changed the size and shape of those bones to fit each animal's lifestyle.
+
+## Slide 16
+
+Anatomy – Vestigial Structures – Human Tailbone
+
+[ Image: Vestigial Structures – Human Tailbone ]
+
+Source: Britannica – Vestigial Organ (britannica.com)
+
+Description
+
+• Humans have a small bone at the bottom of the spine called the coccyx (tailbone)
+• It does not support a tail and has very little function in people
+• Other primates and many mammals use a similar structure to support their tails
+
+How does this support evolution?
+
+The tailbone is a vestigial structure — a leftover body part from an ancestor that actually used it. This supports evolution by showing that humans are related to animals that once had tails.
+
+## Slide 17
+
+Anatomy – Analogous Structures – Wings
+
+[ Image: Analogous Structures – Wings ]
+
+Source: National Geographic – Convergent Evolution (nationalgeographic.com)
+
+Description
+
+• Birds and bats both have wings for flying, but their wings are built differently
+• Bird wings have feathers; bat wings are made of stretched skin
+• They evolved wings separately to solve the same problem: flight
+
+How does this support evolution?
+
+Analogous structures like bird and bat wings show that different animals can independently evolve similar solutions to the same challenge. This process — called convergent evolution — shows how natural selection shapes life in similar ways.
+
+## Slide 18
+
+Biochemistry
+
+Biochemistry compares the chemicals inside living things — like DNA and proteins. The more similar two species' chemistry is, the more closely related they are.
+
+Examples:  DNA Similarity: Humans and Chimps  ·  Cytochrome C Protein  ·  Universal Genetic Code
+
+## Slide 19
+
+Biochemistry – DNA Similarity: Humans and Chimps
+
+[ Image: DNA Similarity: Humans and Chimps ]
+
+Source: Khan Academy – Molecular Evidence for Evolution (khanacademy.org)
+
+Description
+
+• Human DNA and chimpanzee DNA are about 98–99% identical
+• The differences in our DNA account for things like brain size and body shape
+• The closer two species' DNA, the more recently they shared a common ancestor
+
+How does this support evolution?
+
+The near-identical DNA between humans and chimps is strong evidence that we share a recent common ancestor. Small changes in DNA over millions of years can lead to very different-looking animals.
+
+## Slide 20
+
+Biochemistry – Cytochrome C Protein
+
+[ Image: Cytochrome C Protein ]
+
+Source: Britannica – Cytochrome (britannica.com)
+
+Description
+
+• Cytochrome c is a protein used in energy production found in almost all living things
+• The version in humans is nearly identical to that in other mammals
+• More distantly related animals (like yeast) have a more different version
+
+How does this support evolution?
+
+Because the same protein is found — with only small changes — across a huge range of life, it shows that all these organisms evolved from a common ancestor a very long time ago. The more changes, the longer ago species split apart.
+
+## Slide 21
+
+Biochemistry – Universal Genetic Code
+
+[ Image: Universal Genetic Code ]
+
+Source: Khan Academy – Universal Genetic Code (khanacademy.org)
+
+Description
+
+• All living things on Earth use the same basic DNA code (A, T, G, C bases)
+• The same three-base 'words' (codons) code for the same amino acids in all organisms
+• This includes bacteria, plants, fungi, and animals
+
+How does this support evolution?
+
+The fact that all living things share the same genetic language is very strong evidence that life on Earth has one common origin. Evolution built on this original code, leading to the variety of life we see today.
+
+## Slide 22
+
+Summary
+
+• Paleontology – Fossil records show change over time
+• Biogeography – Where species live reveals shared history
+• Embryology – Embryo similarities show common ancestry
+• Anatomy – Body structure comparisons link species
+• Biochemistry – DNA and proteins connect all lifeNow I have the full content. Let me search for images for the key slides and then build the presentation. I'll use pptxgenjs to create a new presentation from scratch with a Google Slides default template look (clean white background, blue accent, Roboto/Arial-like font).
+The Google Slides default template typically has:
+
+White background
+Blue title text (dark blue, like #1A73E8 or a similar tone)
+Clean sans-serif fonts (Arial or similar)
+Accent bar or clean design
+Simple, minimalist look
+
+Let me search for images for the various topics. I need to find web images for:
+
+Archaeopteryx fossil
+Tiktaalik fossil
+Ambulocetus
+Darwin's Finches
+Marsupials in Australia
+Cichlid Fish
+Pharyngeal Pouches embryology
+Human embryo tail
+Limb bud development
+Homologous structures
+Vestigial structures (tailbone)
+Analogous structures wings
+DNA similarity humans and chimps
+Cytochrome C protein
+Universal genetic code
+
+Actually, for the pptx, I'll download images from the web. Let me search for them. I'll use the image search tool sparingly... wait, actually for pptx creation I need to download images to disk. Let me use wget/curl to fetch images from the web.
+Let me use pptxgenjs to create this presentation from scratch. I'll use the Google Slides default template look:
+
+White background (#FFFFFF)
+Title color: Dark blue (#1F3864) or Google blue (#1A237E)
+Text: Dark gray (#212121)
+Accent: Google blue (#4285F4) or similar
+Font: Arial
+Clean, minimal layout
+
+For the "sophomore high school student" writing style, I'll:
+
+Simplify the language
+Make occasional grammar mistakes (like "it's" vs "its", missing comma, etc.)
+Use more casual phrasing
+Keep sentences shorter and less formal
+
+Let me read the pptxgenjs.md to understand the best approach.Show lessReading pptxgenjs guideNow I have all the info I need. Let me create the presentation. I'll:
+
+Download images from the web for each topic
+Create a pptxgenjs script
+Build the presentation in a Google Slides default template style
+
+The Google Slides default template typically has:
+
+White background (#FFFFFF)
+Title font: Arial, dark gray/black
+Clean, minimal design
+Blue accent color: #4285F4 (Google blue) or a dark blue
+Simple header bar at top for content slides
+
+Let me think about the layout:
+
+Title slide: white bg, large title text, subtitle
+Section intro slides: colored bg (Google blue #1A73E8 or similar) with white title
+Content slides: white background, image on one side, text on the other
+Citations slide at the end
+
+For the "sophomore high school student" writing, I'll simplify and add occasional mistakes like:
+
+"it's" instead of "its" once
+Missing a comma
+"fossils shows" instead of "fossils show" once
+Simpler vocabulary
+
+Let me plan the slides:
+
+Title slide
+Paleontology section intro
+Archaeopteryx
+Tiktaalik
+Ambulocetus
+Biogeography section intro
+Darwin's Finches
+Marsupials in Australia
+Cichlid Fish
+Embryology section intro
+Pharyngeal Pouches
+Tail in Human Embryos
+Limb Bud Development
+Anatomy section intro
+Homologous Structures
+Vestigial Structures - Human Tailbone
+Analogous Structures - Wings
+Biochemistry section intro
+DNA Similarity: Humans and Chimps
+Cytochrome C Protein
+Universal Genetic Code
+Summary
+Citations
+
+Now let me search for images to download. I'll use curl to download images from Wikipedia/Wikimedia Commons as they tend to be freely available.
+Actually, for pptxgenjs I can use URLs directly from the web (it downloads them during build). Let me find URLs for each image.
+Let me just use Wikimedia Commons URLs for the images - they're reliable and freely licensed.
+Key images needed:
+
+…
+Show lessDoneNow let me download images for all the slides:Navigated network restrictions to source presentation images strategicallyNavigated network restrictions to source presentation images strategicallyRunning commandbashmkdir -p /home/claude/imgs
+
+# Download images for each topic
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg/400px-Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg" -o /home/claude/imgs/archaeopteryx.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Tiktaalik_roseae_life_restor.jpg/800px-Tiktaalik_roseae_life_restor.jpg" -o /home/claude/imgs/tiktaalik.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Ambulocetus_BW.jpg/640px-Ambulocetus_BW.jpg" -o /home/claude/imgs/ambulocetus.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Darwin%27s_finches_by_Gould.jpg/640px-Darwin%27s_finches_by_Gould.jpg" -o /home/claude/imgs/finches.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Kangaroo_with_joey03.jpg/400px-Kangaroo_with_joey03.jpg" -o /home/claude/imgs/kangaroo.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Cichlidae_-_Cichla_ocellaris_02.jpg/480px-Cichlidae_-_Cichla_ocellaris_02.jpg" -o /home/claude/imgs/cichlid.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Haeckel_drawings.jpg/400px-Haeckel_drawings.jpg" -o /home/claude/imgs/haeckel.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Limb_development.jpg/400px-Limb_development.jpg" -o /home/claude/imgs/limbbud.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Homology_vertebrates-en.svg/640px-Homology_vertebrates-en.svg.png" -o /home/claude/imgs/homologous.png
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Coccyx_from_behind.jpg/300px-Coccyx_from_behind.jpg" -o /home/claude/imgs/coccyx.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Pterosaur_wing_structure.jpg/480px-Pterosaur_wing_structure.jpg" -o /home/claude/imgs/wings.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Chimpanzee_seated_arp.jpg/400px-Chimpanzee_seated_arp.jpg" -o /home/claude/imgs/chimp.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Cytochrome_c.png/400px-Cytochrome_c.png" -o /home/claude/imgs/cytochrome.png
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Aminoacids_table.svg/480px-Aminoacids_table.svg.png" -o /home/claude/imgs/geneticcode.png
+
+# Check sizes to verify downloads
+ls -lh /home/claude/imgs/OutputInput validation errors occurred:
+description: Field requiredDownload images from Wikimedia Commonsbashmkdir -p /home/claude/imgs
+
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg/400px-Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg" -o /home/claude/imgs/archaeopteryx.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Tiktaalik_roseae_life_restor.jpg/800px-Tiktaalik_roseae_life_restor.jpg" -o /home/claude/imgs/tiktaalik.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Ambulocetus_BW.jpg/640px-Ambulocetus_BW.jpg" -o /home/claude/imgs/ambulocetus.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Darwin%27s_finches_by_Gould.jpg/640px-Darwin%27s_finches_by_Gould.jpg" -o /home/claude/imgs/finches.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Kangaroo_with_joey03.jpg/400px-Kangaroo_with_joey03.jpg" -o /home/claude/imgs/kangaroo.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Haeckel_drawings.jpg/400px-Haeckel_drawings.jpg" -o /home/claude/imgs/haeckel.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Homology_vertebrates-en.svg/640px-Homology_vertebrates-en.svg.png" -o /home/claude/imgs/homologous.png
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Chimpanzee_seated_arp.jpg/400px-Chimpanzee_seated_arp.jpg" -o /home/claude/imgs/chimp.jpg
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Cytochrome_c.png/400px-Cytochrome_c.png" -o /home/claude/imgs/cytochrome.png
+curl -sL "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Aminoacids_table.svg/480px-Aminoacids_table.svg.png" -o /home/claude/imgs/geneticcode.png
+
+ls -lh /home/claude/imgs/Outputtotal 5.0K
+-rw-r--r-- 1 root root 21 Apr 17 05:19 ambulocetus.jpg
+-rw-r--r-- 1 root root 21 Apr 17 05:19 archaeopteryx.jpg
+-rw-r--r-- 1 root root 21 Apr 17 05:19 chimp.jpg
+-rw-r--r-- 1 root root 21 Apr 17 05:19 cytochrome.png
+-rw-r--r-- 1 root root 21 Apr 17 05:19 finches.jpg
+-rw-r--r-- 1 root root 21 Apr 17 05:19 geneticcode.png
+-rw-r--r-- 1 root root 21 Apr 17 05:19 haeckel.jpg
+-rw-r--r-- 1 root root 21 Apr 17 05:19 homologous.png
+-rw-r--r-- 1 root root 21 Apr 17 05:19 kangaroo.jpg
+-rw-r--r-- 1 root root 21 Apr 17 05:19 tiktaalik.jpg
+The downloads didn't work (all files are 21 bytes - likely just error messages). Wikimedia requires a proper user agent. Let me try with a user agent header.Test Wikimedia download with user agentbashcurl -sL -A "Mozilla/5.0" "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg/400px-Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg" -o /home/claude/imgs/archaeopteryx.jpg && ls -lh /home/claude/imgs/archaeopteryx.jpg && file /home/claude/imgs/archaeopteryx.jpgOutput-rw-r--r-- 1 root root 21 Apr 17 05:19 /home/claude/imgs/archaeopteryx.jpg
+/home/claude/imgs/archaeopteryx.jpg: ASCII text, with no line terminators
+Still 21 bytes - Wikimedia is blocking downloads. Let me try a different approach and use web_fetch to get image URLs from other sources, or use a different approach for pptxgenjs.
+Actually, I recall that pptxgenjs can embed images from base64. Let me try fetching images from different sources. Let me also try to use the web_fetch tool to get working image URLs.
+Actually, let me try other free image sources. Let me try Pixabay or some science education sites. Or maybe I should search for direct image URLs.
+Actually, let me try with Python instead - maybe using urllib with headers.Test Wikimedia download with Pythonbashpython3 -c "
+import urllib.request
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+req = urllib.request.Request('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg/400px-Archaeopteryx_lithographica_%28Berlin_specimen%29.jpg', headers=headers)
+try:
+    with urllib.request.urlopen(req, timeout=10) as r:
+        data = r.read()
+        with open('/home/claude/imgs/archaeopteryx.jpg', 'wb') as f:
+            f.write(data)
+        print(f'Downloaded {len(data)} bytes')
+except Exception as e:
+    print(f'Error: {e}')
+"OutputError: HTTP Error 403: Forbidden
+Wikimedia is blocking downloads. Let me check what domains are available. According to the network configuration, the allowed domains are:
+
+api.anthropic.com
+archive.ubuntu.com
+crates.io
+files.pythonhosted.org
+github.com
+index.crates.io
+npmjs.com
+npmjs.org
+pypi.org
+pythonhosted.org
+registry.npmjs.org
+registry.yarnpkg.com
+security.ubuntu.com
+static.crates.io
+www.npmjs.com
+www.npmjs.org
+yarnpkg.com
+
+Wait, these are just the allowed domains listed, but it says "Allowed Domains" which means these are allowed but not necessarily all that's allowed... Actually rereading: "Allowed Domains: api.anthropic.com, archive.ubuntu.com..." - this seems to be a whitelist, so only these domains can be accessed.
+So I can't download images from the web directly. I need to use images that are embedded in the pptxgenjs code as data URLs, or use a different approach.
+Actually wait - pptxgenjs itself fetches images during the build process when using URLs. If pptxgenjs is running in the bash environment and tries to fetch from the web, it would be subject to the same network restrictions.
+So I need to either:
+
+Use only images from allowed domains (api.anthropic.com, github.com, npmjs.com etc.) - probably no evolution images there
+Generate placeholder colored boxes instead of real images
+Use images from GitHub raw content (github.com is allowed!)
+
+Actually, let me check if I can get evolution images from GitHub. There are many GitHub repos with educational content. Let me search for one. Or maybe I can use the Anthropic API to generate image descriptions.
+Wait, actually let me reconsider. The allowed domains list includes api.anthropic.com. So I could potentially use Claude's vision to describe what images would look like, but I can't get actual images.
+Wait - actually let me re-read the network config. It says "Allowed Domains" - these might be the only ones allowed through the egress proxy. …Show lessTest if GitHub raw is accessibleScriptTest github accessScriptgithub.com itself works, but raw.githubusercontent.com doesn't. Let me try to access specific GitHub repo pages that might have image assets. Actually, assets on github.com are typically served from different domains.
+Let me try a different approach - I'll use the web_fetch tool to get image URLs, since that goes through a different proxy. But the web_fetch tool is for me to use in my conversation context, not in the bash environment.
+Actually, let me try downloading images using the web_fetch tool and then saving them to disk. But web_fetch returns text content, not binary images.
+The best approach here is to:
+
+Use Python to generate SVG images for each topic that look like scientific illustrations
+Convert them to PNG files
+Use those in the presentation
+
+Or alternatively, I can try using scipy/matplotlib to generate scientific-looking charts/diagrams.
+Actually, let me look at this differently. I know that npm can access npmjs.com/registry.npmjs.org. Are there any npm packages that include educational or scientific SVG assets?
+Actually the simplest approach that will look good:
+
+Create informative colored placeholder "image" boxes with text like "[Archaeopteryx Fossil Photo]" and a colored background
+Make the slides look excellent with Google Slides template style
+The user can open in Google Slides/PowerPoint and replace the placeholders
+
+Actually, let me try to search for cached/CDN versions of Wikimedia images. Let me check if any CDN domains work.
+Actually I just realized - let me try to fetch images from api.anthropic.com... no that won't have images.
+Let me try using the pptxgenjs script itself to fetch images at runtime from various sources. Maybe when it runs locally, different network restrictions apply...
+Actually, re-reading: "The egress proxy will return a header with an x-deny-reason that can indicate the reason for network failures." This implies ALL outbound traffic goes through the egress proxy. …Show lessInstall Pillow for image generationbashpip install Pillow --break-system-packages -q && python3 -c "from PIL import Image, ImageDraw, ImageFont; print('Pillow ready')"OutputPillow ready
+Generate informative placeholder images for each slide topicbashpython3 << 'EOF'
+from PIL import Image, ImageDraw, ImageFont
+import os
+
+os.makedirs("/home/claude/imgs", exist_ok=True)
+
+# Image definitions: (filename, bg_color, text_lines, accent_color)
+images = [
+    ("archaeopteryx.jpg", (245,240,220), ["Archaeopteryx Fossil", "~150 million years old", "Berlin specimen", "Part bird, part dinosaur"], (120,80,40)),
+    ("tiktaalik.jpg", (210,230,245), ["Tiktaalik roseae", "~375 million years old", "Fish with limb-like fins", "Shallow water species"], (40,80,120)),
+    ("ambulocetus.jpg", (220,235,220), ["Ambulocetus natans", "~48 million years old", "'Walking whale'", "Four legs + swimming spine"], (40,100,60)),
+    ("finches.jpg", (240,245,210), ["Darwin's Finches", "Galapagos Islands", "14 different species", "Each beak = different food"], (80,100,30)),
+    ("kangaroo.jpg", (245,235,210), ["Australian Marsupials", "Kangaroos & Koalas", "Isolated 45M years ago", "Evolved separately"], (120,80,30)),
+    ("cichlid.jpg", (210,230,245), ["Cichlid Fish", "Africa's Great Lakes", "500+ species", "Rapid speciation"], (20,80,140)),
+    ("haeckel.jpg", (240,235,240), ["Embryo Comparison", "Fish  Frog  Chicken  Human", "Pharyngeal pouches visible", "Shared early development"], (100,40,120)),
+    ("humantail.jpg", (245,230,230), ["Human Embryo", "Weeks 4-8 of development", "Temporary tail present", "Absorbed before birth"], (140,40,40)),
+    ("limbbud.jpg", (225,245,230), ["Limb Bud Development", "All vertebrate embryos", "Same genes control growth", "Leads to arms/wings/flippers"], (30,120,60)),
+    ("homologous.png", (230,240,250), ["Homologous Structures", "Human  Bat  Whale  Cat", "Same bone arrangement", "Different functions"], (40,60,140)),
+    ("coccyx.jpg", (245,235,220), ["Human Tailbone (Coccyx)", "Bottom of spine", "No longer supports a tail", "Leftover from ancestors"], (100,70,30)),
+    ("wings.jpg", (235,240,245), ["Wings: Bird vs. Bat", "Both used for flying", "Built completely differently", "Evolved independently"], (50,90,130)),
+    ("chimp.jpg", (245,238,220), ["Human vs. Chimp DNA", "98-99% identical", "Small differences =", "very different animals"], (80,60,20)),
+    ("cytochrome.png", (225,235,250), ["Cytochrome C Protein", "Found in nearly all life", "Humans ≈ other mammals", "Yeast = more different"], (40,60,140)),
+    ("geneticcode.png", (230,245,230), ["Universal Genetic Code", "All life uses A T G C", "Same codons = same amino acids", "Bacteria to humans"], (30,110,50)),
+]
+
+W, H = 480, 360
+
+for fname, bg, lines, accent in images:
+    img = Image.new("RGB", (W, H), bg)
+    draw = ImageDraw.Draw(img)
+    
+    # Accent bar at top
+    draw.rectangle([0, 0, W, 48], fill=accent)
+    
+    # Border
+    draw.rectangle([0, 0, W-1, H-1], outline=accent, width=3)
+    
+    # Icon circle
+    draw.ellipse([16, 10, 30, 26], fill=(255,255,255,200))
+    
+    try:
+        font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
+        font_body = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 15)
+    except:
+        font_title = ImageFont.load_default()
+        font_body = font_title
+        font_small = font_title
+    
+    # Title in accent bar
+    draw.text((45, 13), lines[0], fill=(255,255,255), font=font_title)
+    
+    # Body lines
+    y = 80
+    for line in lines[1:]:
+        draw.text((30, y), "▸  " + line, fill=(60,60,60), font=font_body)
+        y += 40
+    
+    # Subtle grid lines
+    for gy in range(130, H, 50):
+        draw.line([20, gy, W-20, gy], fill=(220,220,220), width=1)
+    
+    path = f"/home/claude/imgs/{fname}"
+    img.save(path, quality=90)
+    print(f"Created {path}")
+
+print("All images created!")
+EOFOutputCreated /home/claude/imgs/archaeopteryx.jpg
+Created /home/claude/imgs/tiktaalik.jpg
+Created /home/claude/imgs/ambulocetus.jpg
+Created /home/claude/imgs/finches.jpg
+Created /home/claude/imgs/kangaroo.jpg
+Created /home/claude/imgs/cichlid.jpg
+Created /home/claude/imgs/haeckel.jpg
+Created /home/claude/imgs/humantail.jpg
+Created /home/claude/imgs/limbbud.jpg
+Created /home/claude/imgs/homologous.png
+Created /home/claude/imgs/coccyx.jpg
+Created /home/claude/imgs/wings.jpg
+Created /home/claude/imgs/chimp.jpg
+Created /home/claude/imgs/cytochrome.png
+Created /home/claude/imgs/geneticcode.png
+All images created!
+Now let me create the pptxgenjs script. I'll make it look like Google Slides default template and with sophomore writing style with occasional grammar mistakes.
+Google Slides "Simple Light" or default template characteristics:
+
+White background (#FFFFFF)
+Title slide has a colored background (often a muted blue/gray like #CFE2F3 or a dark blue)
+Section slides are colored
+Content slides are white with clean minimal design
+Font: Arial
+Title color: Dark (near black or dark blue)
+Accent line: light blue or teal
+
+For section divider slides (Google style):
+
+Often uses a medium-dark blue background
+White text
+Clean, simple
+
+For content slides:
+
+White background
+Title in dark color (dark blue or near-black) at top
+Content area below
+Two-column layout with image on right
+
+Let me write this now. I'll make the text sound like a 10th grader with some simple mistakes.
+Sophomore style rewrites:
+
+"Paleontology is basically the study of fossils"
+"it's bones" instead of "its bones" (intentional grammar error)
+Missing commas sometimes
+"alot" once
+"really" and "basically" sprinkled in
+Simpler words like "shows" instead of "demonstrates"
+Occasional run-on sentence
+
+Let me plan the slides:
+Slide 1: Title - "Evidence of Evolution" (white with blue header like Google Slides)
+Slide 2: Paleontology section intro
+Slide 3: Archaeopteryx
+Slide 4: Tiktaalik
+Slide 5: Ambulocetus
+Slide 6: Biogeography section intro
+Slide 7: Darwin's Finches
+Slide 8: Marsupials in Australia
+Slide 9: Cichlid Fish
+Slide 10: Embryology section intro
+Slide 11: Pharyngeal Pouches
+Slide 12: Tail in Human Embryos
+Slide 13: Limb Bud Development
+Slide 14: Anatomy section intro
+Slide 15: Homologous Structures
+Slide 16: Vestigial Structures
+Slide 17: Analogous Structures
+Slide 18: Biochemistry section intro
+Slide 19: DNA Similarity
+Slide 20: Cytochrome C
+Slide 21: Universal Genetic Code
+Slide 22: Summary
+Slide 23: Citations
+Google Slides default "Simple Light" theme colors:
+…Show lessDoneNow let me create the full pptxgenjs presentation script:Ran 7 commands, created a fileRan 7 commands, created a fileInstall pptxgenjsbashnpm install -g pptxgenjs 2>&1 | tail -3Output
+changed 19 packages in 5s
+Create pptxgenjs script for the evolution presentationmake_pptx.jsRun the pptxgenjs scriptbashcd /home/claude && node make_pptx.js 2>&1OutputDone! Saved to Evidence_of_Evolution_Final.pptx
+Convert to PDF and render slides for QAbashpython scripts/office/soffice.py --headless --convert-to pdf /home/claude/Evidence_of_Evolution_Final.pptx && rm -f /home/claude/slide-*.jpg && pdftoppm -jpeg -r 150 /home/claude/Evidence_of_Evolution_Final.pdf /home/claude/slide && ls /home/claude/slide-*.jpg | head -6Outputpython: can't open file '//scripts/office/soffice.py': [Errno 2] No such file or directory
+Find soffice.pybashfind /mnt/skills -name "soffice.py" 2>/dev/null | head -3Output/mnt/skills/public/docx/scripts/office/soffice.py
+/mnt/skills/public/pptx/scripts/office/soffice.py
+/mnt/skills/public/xlsx/scripts/office/soffice.py
+Convert to PDF and render slidesbashpython /mnt/skills/public/pptx/scripts/office/soffice.py --headless --convert-to pdf /home/claude/Evidence_of_Evolution_Final.pptx && rm -f /home/claude/slide-*.jpg && pdftoppm -jpeg -r 150 /home/claude/Evidence_of_Evolution_Final.pdf /home/claude/slide && ls /home/claude/slide-*.jpg | wc -lOutputconvert /home/claude/Evidence_of_Evolution_Final.pptx as a Impress document -> /Evidence_of_Evolution_Final.pdf using filter : impress_pdf_Export
+Convert from working directorybashcd /home/claude && python /mnt/skills/public/pptx/scripts/office/soffice.py --headless --convert-to pdf Evidence_of_Evolution_Final.pptx && ls -lh *.pdfOutputconvert /home/claude/Evidence_of_Evolution_Final.pptx as a Impress document -> /home/claude/Evidence_of_Evolution_Final.pdf using filter : impress_pdf_Export
+-rw-r--r-- 1 root root 425K Apr 17 05:23 Evidence_of_Evolution_Final.pdf
+Render slides to imagesbashcd /home/claude && rm -f slide-*.jpg && pdftoppm -jpeg -r 150 Evidence_of_Evolution_Final.pdf slide && ls slide-*.jpgOutputslide-01.jpg
+slide-02.jpg
+slide-03.jpg
+slide-04.jpg
+slide-05.jpg
+slide-06.jpg
+slide-07.jpg
+slide-08.jpg
+slide-09.jpg
+slide-10.jpg
+slide-11.jpg
+slide-12.jpg
+slide-13.jpg
+slide-14.jpg
+slide-15.jpg
+slide-16.jpg
+slide-17.jpg
+slide-18.jpg
+slide-19.jpg
+slide-20.jpg
+slide-21.jpg
+slide-22.jpg
+slide-23.jpg
+DoneLet me inspect the slides and do QA:
